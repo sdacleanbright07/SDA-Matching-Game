@@ -75,18 +75,20 @@
     .card {
       background: linear-gradient(135deg, #ffeaa7, #fab1a0);
       border-radius: 6px;
-      display: flex;
+      display: flex; /* ensures centering */
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-size: 1.5rem; /* smaller */
+      font-size: 1.5rem;
     }
 
     .card img {
-      width: 65%; /* smaller images */
+      width: 65%;   /* scale image */
       height: auto;
       object-fit: contain;
+      display: block;
+      margin: auto; /* keeps it centered */
       pointer-events: none;
     }
 
