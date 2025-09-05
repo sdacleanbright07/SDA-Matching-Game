@@ -22,81 +22,71 @@
       align-items: center;
     }
 
-    /* Main container fills screen */
     .game-container {
       width: 100%;
       max-width: 600px;
-      height: 95vh; /* almost full height */
+      height: 100vh; /* full height */
       background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
-
+      border-radius: 0;
+      padding: 8px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
 
     .header {
       text-align: center;
+      flex: 0 0 auto;
     }
 
     .title {
-      font-size: 2rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: #e91e63;
-      margin-bottom: 5px;
     }
 
     .subtitle {
-      font-size: 1rem;
+      font-size: 0.8rem;
       color: #666;
     }
 
     .game-stats {
       display: flex;
       justify-content: space-around;
-      margin: 10px 0;
-      flex-wrap: wrap;
-      gap: 10px;
+      margin: 4px 0;
+      font-size: 0.8rem;
     }
 
     .stat {
       background: linear-gradient(135deg, #ff6b9d, #e91e63);
       color: white;
-      padding: 6px 15px;
-      border-radius: 25px;
+      padding: 4px 10px;
+      border-radius: 12px;
       font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
     }
 
-    /* Game board fills space */
+    /* --- Board takes all remaining space --- */
     .game-board {
-      flex: 1;
+      flex: 1 1 auto;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      align-content: center;
+      grid-auto-rows: 1fr;
+      gap: 6px;
     }
 
     .card {
-      aspect-ratio: 1;
       background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-      border-radius: 12px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       font-size: 2rem;
       overflow: hidden;
     }
 
     .card img {
-      width: 70%;
+      width: 80%;
       height: auto;
       object-fit: contain;
       pointer-events: none;
@@ -119,44 +109,34 @@
     .controls {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0;
     }
 
     .btn {
       background: linear-gradient(135deg, #ff6b9d, #e91e63);
       color: white;
       border: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.9rem;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
     }
 
     .message {
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #e91e63;
-      min-height: 25px;
+      min-height: 18px;
     }
 
-    @media (max-width: 768px) {
-      .game-board {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
+    /* On small phones → 4x4 always fits */
     @media (max-width: 480px) {
       .game-board {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
       }
     }
   </style>
@@ -164,7 +144,7 @@
 <body>
   <div class="game-container">
     <div class="header">
-      <h1 class="title">💕 Sabon De Amor 💕</h1>
+      <h1 class="title">💕 Sabon de Amor 💕</h1>
       <p class="subtitle">Match the bottles to spread the love!</p>
     </div>
 
@@ -177,17 +157,16 @@
     <div class="game-board" id="gameBoard"></div>
 
     <div class="controls">
-      <button class="btn" onclick="startNewGame()">New Game</button>
+      <button class="btn" onclick="startNewGame()">New</button>
       <button class="btn" onclick="resetGame()">Reset</button>
     </div>
 
-    <div class="message" id="message">Click cards to find matching pairs!</div>
+    <div class="message" id="message">Click cards to find pairs!</div>
   </div>
 
   <script>
     class SabonDeAmorGame {
       constructor() {
-        // replace emojis with images in images/ folder
         this.cards = [
           "images/dishwashing.png",
           "images/fabric.png",
@@ -290,7 +269,7 @@
           this.flippedCards = [];
           this.isProcessing = false;
           this.updateDisplay();
-        }, 1000);
+        }, 800);
       }
 
       gameWon() {
@@ -298,9 +277,8 @@
         const bonus = Math.max(0, 1000 - (this.moves * 10));
         this.score += bonus;
         this.updateDisplay();
-
         setTimeout(() => {
-          alert(`🎉 Congratulations! All bottles matched! Final Score: ${this.score}\n\n✨ Sabon De Amor – the best and affordable cleaning products. Refill Now! ✨`);
+          alert(`🎉 Congratulations! Final Score: ${this.score}\n\n✨ Sabon De Amor – the best and affordable cleaning products. Refill Now! ✨`);
         }, 300);
       }
 
@@ -332,7 +310,7 @@
         this.score = 0;
         this.isProcessing = false;
         document.getElementById('time').textContent = '0:00';
-        this.showMessage('Click cards to find matching pairs!');
+        this.showMessage('Click cards to find pairs!');
         this.initGame();
       }
     }
