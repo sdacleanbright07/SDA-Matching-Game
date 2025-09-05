@@ -63,7 +63,6 @@
       font-weight: 600;
     }
 
-    /* --- Board fills space --- */
     .game-board {
       flex: 1 1 auto;
       display: grid;
@@ -136,7 +135,7 @@
 <body>
   <div class="game-container">
     <div class="header">
-      <h1 class="title">💕SABON DE AMOR💕</h1>
+      <h1 class="title">💕 Sabon de Amor 💕</h1>
       <p class="subtitle">Match the bottles!</p>
     </div>
 
@@ -179,7 +178,7 @@
         this.gameBoard = document.getElementById('gameBoard');
         this.isProcessing = false;
 
-        this.initGame(true); // true means shuffle on start
+        this.initGame(true);
       }
 
       initGame(shuffle = true) {
@@ -246,7 +245,7 @@
             firstCard.classList.add('matched');
             secondCard.classList.add('matched');
             this.matchedPairs++;
-            this.score += 100;
+            this.score += 50; // harder: only 50 points for match
             this.showMessage('Perfect! 💕 Match!');
             if (this.matchedPairs === this.cards.length) {
               this.gameWon();
@@ -256,6 +255,7 @@
             secondCard.classList.remove('flipped');
             firstCard.querySelector('.card-content').innerHTML = `<img src="images/back.png" alt="back">`;
             secondCard.querySelector('.card-content').innerHTML = `<img src="images/back.png" alt="back">`;
+            this.score = Math.max(0, this.score - 5); // penalty for wrong
             this.showMessage('Try again 💖');
           }
           this.flippedCards = [];
@@ -266,17 +266,28 @@
 
       gameWon() {
         clearInterval(this.timerInterval);
-        const bonus = Math.max(0, 1000 - (this.moves * 10));
-        this.score += bonus;
+        const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+
+        // Time penalty: -2 points every 10 seconds
+        const timePenalty = Math.floor(elapsed / 10) * 2;
+        this.score = Math.max(0, this.score - timePenalty);
+
+        // Perfect bonus if no wrong moves
+        if (this.moves === this.matchedPairs) {
+          this.score += 200;
+        }
+
         this.updateDisplay();
         setTimeout(() => {
-          alert(`🎉 Congratulations! Final Score: ${this.score}\n\n✨ Sabon De Amor – the best and affordable cleaning products. Refill Now! ✨`);
+          alert(`🎉 Congratulations! Final Score: ${this.score}
+Moves: ${this.moves}
+Time: ${elapsed}s`);
         }, 300);
       }
 
       startTimer() {
         if (this.timerInterval) {
-          clearInterval(this.timerInterval); // clear old timer
+          clearInterval(this.timerInterval);
         }
         this.startTime = Date.now();
         this.timerInterval = setInterval(() => {
@@ -313,13 +324,12 @@
     let game = new SabonDeAmorGame();
 
     function startNewGame() {
-      game = new SabonDeAmorGame(); // reshuffles deck
+      game = new SabonDeAmorGame(); // reshuffles
     }
 
     function resetGame() {
-      game.reset(false); // keeps current deck order
+      game.reset(false); // keeps current deck
     }
   </script>
 </body>
 </html>
-
