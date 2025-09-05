@@ -25,12 +25,11 @@
     .game-container {
       width: 100%;
       max-width: 600px;
-      height: 100vh; /* full height */
+      height: 100vh;
       background: rgba(255, 255, 255, 0.95);
-      border-radius: 0;
-      padding: 8px;
       display: flex;
       flex-direction: column;
+      padding: 6px;
     }
 
     .header {
@@ -39,13 +38,13 @@
     }
 
     .title {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #e91e63;
     }
 
     .subtitle {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #666;
     }
 
@@ -53,40 +52,39 @@
       display: flex;
       justify-content: space-around;
       margin: 4px 0;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
     }
 
     .stat {
       background: linear-gradient(135deg, #ff6b9d, #e91e63);
       color: white;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 3px 8px;
+      border-radius: 10px;
       font-weight: 600;
     }
 
-    /* --- Board takes all remaining space --- */
+    /* --- Board fills space --- */
     .game-board {
       flex: 1 1 auto;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-auto-rows: 1fr;
-      gap: 6px;
+      gap: 4px;
     }
 
     .card {
       background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-      border-radius: 8px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-size: 2rem;
-      overflow: hidden;
+      font-size: 1.5rem; /* smaller */
     }
 
     .card img {
-      width: 80%;
+      width: 65%; /* smaller images */
       height: auto;
       object-fit: contain;
       pointer-events: none;
@@ -109,35 +107,27 @@
     .controls {
       display: flex;
       justify-content: center;
-      gap: 6px;
-      margin: 4px 0;
+      gap: 4px;
+      margin: 3px 0;
     }
 
     .btn {
       background: linear-gradient(135deg, #ff6b9d, #e91e63);
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
       font-weight: 600;
       cursor: pointer;
     }
 
     .message {
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 600;
       color: #e91e63;
-      min-height: 18px;
-    }
-
-    /* On small phones → 4x4 always fits */
-    @media (max-width: 480px) {
-      .game-board {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 4px;
-      }
+      min-height: 16px;
     }
   </style>
 </head>
@@ -145,7 +135,7 @@
   <div class="game-container">
     <div class="header">
       <h1 class="title">💕 Sabon de Amor 💕</h1>
-      <p class="subtitle">Match the bottles to spread the love!</p>
+      <p class="subtitle">Match the bottles!</p>
     </div>
 
     <div class="game-stats">
@@ -255,7 +245,7 @@
             secondCard.classList.add('matched');
             this.matchedPairs++;
             this.score += 100;
-            this.showMessage('Perfect! 💕 Match found!');
+            this.showMessage('Perfect! 💕 Match!');
             if (this.matchedPairs === this.cards.length) {
               this.gameWon();
             }
@@ -264,12 +254,12 @@
             secondCard.classList.remove('flipped');
             firstCard.querySelector('.card-content').innerHTML = `<img src="images/back.png" alt="back">`;
             secondCard.querySelector('.card-content').innerHTML = `<img src="images/back.png" alt="back">`;
-            this.showMessage('Try again! 💖');
+            this.showMessage('Try again 💖');
           }
           this.flippedCards = [];
           this.isProcessing = false;
           this.updateDisplay();
-        }, 800);
+        }, 700);
       }
 
       gameWon() {
