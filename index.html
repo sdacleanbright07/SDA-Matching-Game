@@ -75,7 +75,7 @@
     .card {
       background: linear-gradient(135deg, #ffeaa7, #fab1a0);
       border-radius: 6px;
-      display: flex; /* ensures centering */
+      display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
@@ -84,11 +84,11 @@
     }
 
     .card img {
-      width: 65%;   /* scale image */
+      width: 65%;
       height: auto;
       object-fit: contain;
       display: block;
-      margin: auto; /* keeps it centered */
+      margin: auto;
       pointer-events: none;
     }
 
@@ -179,12 +179,12 @@
         this.gameBoard = document.getElementById('gameBoard');
         this.isProcessing = false;
 
-        this.initGame();
+        this.initGame(true); // true means shuffle on start
       }
 
-      initGame() {
+      initGame(shuffle = true) {
         this.createGameCards();
-        this.shuffleCards();
+        if (shuffle) this.shuffleCards();
         this.renderBoard();
         this.startTimer();
         this.updateDisplay();
@@ -275,6 +275,9 @@
       }
 
       startTimer() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval); // clear old timer
+        }
         this.startTime = Date.now();
         this.timerInterval = setInterval(() => {
           const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
@@ -294,7 +297,7 @@
         document.getElementById('message').textContent = text;
       }
 
-      reset() {
+      reset(reshuffle = false) {
         clearInterval(this.timerInterval);
         this.flippedCards = [];
         this.matchedPairs = 0;
@@ -303,20 +306,19 @@
         this.isProcessing = false;
         document.getElementById('time').textContent = '0:00';
         this.showMessage('Click cards to find pairs!');
-        this.initGame();
+        this.initGame(reshuffle);
       }
     }
 
     let game = new SabonDeAmorGame();
 
     function startNewGame() {
-      game = new SabonDeAmorGame();
+      game = new SabonDeAmorGame(); // reshuffles deck
     }
 
     function resetGame() {
-      game.reset();
+      game.reset(false); // keeps current deck order
     }
   </script>
 </body>
 </html>
-
